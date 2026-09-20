@@ -40,7 +40,7 @@ class MyBigNumberTraceTest {
         @Test
         @DisplayName("positions are consecutive and start at the units column")
         void numbersTheColumns() {
-            SumResult result = calculator.sumWithTrace("555", "555");
+            SumResult result = calculator.sumWithTrace("555", "444");
 
             assertThat(result.steps()).extracting(SumStep::position).containsExactly(0, 1, 2);
             assertThat(result.steps().get(0).placeValueLabel()).isEqualTo("units");
