@@ -1,0 +1,83 @@
+/* Add2Num — chỉ những gì Bootstrap không có sẵn. */
+
+.result-value {
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.4;
+    word-break: break-all;
+    color: #0a58ca;
+}
+
+/* Kết quả rất dài thì cho cuộn thay vì đẩy trang dài vô tận. */
+.result-value-long {
+    font-size: 1rem;
+    font-weight: 500;
+    max-height: 14rem;
+    overflow-y: auto;
+    padding: .75rem;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: .375rem;
+}
+
+.stat {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: .5rem;
+    padding: .5rem .75rem;
+    height: 100%;
+}
+
+.stat-label {
+    color: #6c757d;
+    font-size: .75rem;
+}
+
+.stat-value {
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+/* Khối "đặt tính rồi tính". */
+.paper {
+    font-size: 1.15rem;
+    line-height: 1.5;
+    margin: 0;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+.paper .carry-row {
+    color: #c1121f;
+    font-size: .85em;
+}
+
+.paper .rule {
+    color: #6c757d;
+}
+
+.paper .sum-row {
+    font-weight: 700;
+    color: #0a58ca;
+}
+
+.step-table-wrapper {
+    max-height: 28rem;
+    overflow-y: auto;
+}
+
+/* Hàng vừa được thêm vào trong lúc chạy từng bước. */
+tr.step-current td {
+    background-color: #fff3cd !important;
+}
+
+tr.step-carry td:last-child {
+    font-weight: 700;
+    color: #c1121f;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .progress-bar {
+        transition: none;
+    }
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add2Num — Đã xảy ra lỗi</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="bg-body-tertiary">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand fw-semibold" th:href="@{/}">Add2Num</a>
+  </div>
+</nav>
+
+<main class="container py-5">
+  <div class="card shadow-sm mx-auto" style="max-width: 40rem;">
+    <div class="card-body text-center py-5">
+      <div class="display-4 fw-bold text-danger" th:text="${status} ?: '500'">500</div>
+      <p class="lead mt-3 mb-1" th:text="${error} ?: 'Đã xảy ra lỗi'">Đã xảy ra lỗi</p>
+      <p class="text-muted small mb-4" th:if="${path}">
+        Đường dẫn: <code th:text="${path}">/</code>
+      </p>
+      <a class="btn btn-primary" th:href="@{/}">Quay lại trang tính</a>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

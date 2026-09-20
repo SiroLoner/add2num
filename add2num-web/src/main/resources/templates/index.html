@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add2Num — Cộng hai số lớn</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="bg-body-tertiary">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand fw-semibold" th:href="@{/}">Add2Num</a>
+    <span class="navbar-text small">Cộng hai số nguyên rất lớn theo cách cộng tay</span>
+  </div>
+</nav>
+
+<main class="container py-4">
+
+  <!-- ───────────────────────────── Form nhập liệu ───────────────────────────── -->
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white fw-semibold">Nhập hai số cần cộng</div>
+        <div class="card-body">
+
+          <form th:action="@{/}" th:object="${form}" method="post" novalidate>
+
+            <div class="mb-3">
+              <label for="firstNumber" class="form-label">Số thứ nhất</label>
+              <textarea id="firstNumber" th:field="*{firstNumber}" rows="2" spellcheck="false"
+                        class="form-control font-monospace"
+                        th:classappend="${#fields.hasErrors('firstNumber')} ? 'is-invalid' : ''"
+                        placeholder="ví dụ: 1234"></textarea>
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('firstNumber')}"
+                   th:errors="*{firstNumber}">lỗi</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="secondNumber" class="form-label">Số thứ hai</label>
+              <textarea id="secondNumber" th:field="*{secondNumber}" rows="2" spellcheck="false"
+                        class="form-control font-monospace"
+                        th:classappend="${#fields.hasErrors('secondNumber')} ? 'is-invalid' : ''"
+                        placeholder="ví dụ: 897"></textarea>
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('secondNumber')}"
+                   th:errors="*{secondNumber}">lỗi</div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+              <button type="submit" class="btn btn-primary px-4">Cộng</button>
+              <button type="button" class="btn btn-outline-secondary" id="btn-example">Điền ví dụ</button>
+              <button type="button" class="btn btn-outline-secondary" id="btn-clear">Xoá</button>
+              <span class="text-muted small ms-auto">
+                Tối đa <span th:text="${#numbers.formatInteger(maxInputDigits, 1, 'POINT')}">100.000</span> chữ số mỗi số
+              </span>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white fw-semibold">Cách làm</div>
+        <div class="card-body small text-body-secondary">
+          <p class="mb-2">
+            Hai số được cộng đúng như học sinh lớp 3 làm trên giấy: duyệt từ phải sang trái,
+            cộng từng cặp chữ số cùng với số nhớ, viết chữ số cuối của tổng và nhớ phần còn lại
+            sang cột tiếp theo.
+          </p>
+          <p class="mb-2">
+            Toàn bộ phép tính nằm trong thư viện <code>add2num-core</code> (TASK 1).
+            Trang web này (TASK 2) chỉ gọi lại thư viện đó, không viết lại thuật toán.
+          </p>
+          <p class="mb-0">
+            Không dùng <code>BigInteger</code>, <code>BigDecimal</code> hay kiểu số nguyên thuỷ nào
+            để cộng, nên độ dài của số chỉ bị giới hạn bởi bộ nhớ.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────────────────────── Kết quả ───────────────────────────── -->
+  <div th:if="${view != null}" class="mt-4">
+
+    <div class="card shadow-sm border-primary-subtle">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <span class="fw-semibold">Kết quả</span>
+        <button type="button" class="btn btn-sm btn-outline-primary" id="btn-copy"
+                th:attr="data-value=${view.value}">Sao chép</button>
+      </div>
+      <div class="card-body">
+        <div class="result-value font-monospace"
+             th:classappend="${view.longResult} ? 'result-value-long' : ''"
+             th:text="${view.value}">0</div>
+
+        <div class="row row-cols-2 row-cols-md-4 g-2 mt-3 small">
+          <div class="col">
+            <div class="stat">
+              <div class="stat-label">Số chữ số kết quả</div>
+              <div class="stat-value" th:text="${#numbers.formatInteger(view.digitCount, 1, 'POINT')}">4</div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="stat">
+              <div class="stat-label">Số cột đã tính</div>
+              <div class="stat-value" th:text="${#numbers.formatInteger(view.totalSteps, 1, 'POINT')}">4</div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="stat">
+              <div class="stat-label">Số lần nhớ</div>
+              <div class="stat-value" th:text="${#numbers.formatInteger(view.carryCount, 1, 'POINT')}">3</div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="stat">
+              <div class="stat-label">Thời gian cộng</div>
+              <div class="stat-value"><span th:text="${view.elapsedMillis}">0.05</span> ms</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bảng cộng dọc như trên giấy -->
+    <div class="card shadow-sm mt-4" th:if="${view.columnLayoutAvailable}">
+      <div class="card-header bg-white fw-semibold">Đặt tính rồi tính</div>
+      <div class="card-body">
+        <pre class="paper mb-0"><span class="carry-row" th:text="${view.columnLayout.carryRow}"> </span>
+<span th:text="${view.columnLayout.firstRow}">1234</span>
+<span th:text="${view.columnLayout.secondRow}"> 897</span>
+<span class="rule" th:text="${view.columnLayout.rule}">----</span>
+<span class="sum-row" th:text="${view.columnLayout.sumRow}">2131</span></pre>
+        <p class="text-muted small mb-0 mt-2">Hàng trên cùng là các số nhớ.</p>
+      </div>
+    </div>
+
+    <!-- ─────────────────── Tiến trình tính toán ─────────────────── -->
+    <div class="card shadow-sm mt-4">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <span class="fw-semibold">Tiến trình tính toán</span>
+        <div class="btn-group btn-group-sm" role="group">
+          <button type="button" class="btn btn-outline-secondary" id="btn-play">Chạy</button>
+          <button type="button" class="btn btn-outline-secondary" id="btn-step">Từng bước</button>
+          <button type="button" class="btn btn-outline-secondary" id="btn-reset">Về đầu</button>
+          <button type="button" class="btn btn-outline-secondary" id="btn-all">Hiện tất cả</button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div id="steps-data" th:attr="data-steps=${stepsJson}" hidden></div>
+
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="progress flex-grow-1" role="progressbar" aria-label="Tiến trình tính toán"
+               aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar progress-bar-striped" id="progress-bar" style="width: 0%"></div>
+          </div>
+          <span class="small text-muted text-nowrap" id="progress-label">0 / 0 cột</span>
+        </div>
+
+        <div th:if="${view.truncated}" class="alert alert-warning py-2 small">
+          Phép tính có <strong th:text="${#numbers.formatInteger(view.totalSteps, 1, 'POINT')}">0</strong> cột.
+          Để trang không quá nặng, chỉ
+          <strong th:text="${#numbers.formatInteger(view.shownSteps, 1, 'POINT')}">0</strong> cột đầu tiên
+          được hiển thị. Kết quả ở trên vẫn là kết quả đầy đủ.
+        </div>
+
+        <div class="table-responsive step-table-wrapper">
+          <table class="table table-sm table-hover align-middle mb-0">
+            <thead class="table-light">
+            <tr>
+              <th scope="col" class="text-end">Cột</th>
+              <th scope="col">Hàng</th>
+              <th scope="col" class="text-end">Chữ số 1</th>
+              <th scope="col" class="text-end">Chữ số 2</th>
+              <th scope="col" class="text-end">Nhớ vào</th>
+              <th scope="col" class="text-end">Tổng</th>
+              <th scope="col" class="text-end">Viết</th>
+              <th scope="col" class="text-end">Nhớ ra</th>
+            </tr>
+            </thead>
+            <tbody id="step-rows">
+            <!-- các hàng được chèn bằng JavaScript để có thể chạy từng bước -->
+            </tbody>
+          </table>
+        </div>
+
+        <noscript>
+          <div class="alert alert-secondary mt-3 mb-0 small">
+            Trình duyệt đang tắt JavaScript nên phần chạy từng bước không hoạt động.
+            Dưới đây là toàn bộ các cột đã tính.
+          </div>
+          <table class="table table-sm mt-2 mb-0">
+            <tbody>
+            <tr th:each="step : ${view.steps}">
+              <td class="text-end" th:text="${step.column}">1</td>
+              <td class="font-monospace" th:text="${step.description}">4 + 7 + 0 = 11 -&gt; write 1, carry 1</td>
+            </tr>
+            </tbody>
+          </table>
+        </noscript>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="container py-4 text-center text-muted small">
+  Add2Num — TASK 1 <code>add2num-core</code> · TASK 2 <code>add2num-web</code> ·
+  Spring Boot + Thymeleaf + Bootstrap 5.2.0
+</footer>
+
+<script th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>
