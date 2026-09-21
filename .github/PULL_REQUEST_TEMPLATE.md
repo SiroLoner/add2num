@@ -1,6 +1,6 @@
 ## 1. Traceability
 
-- **Issue:** Closes #WO-201
+- **Issue:** Closes #<issue-number>
 - **Spec/document:** `docs/work-order-decomposition.md`
 
 ## 2. Summary of Changes
