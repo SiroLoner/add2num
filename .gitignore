@@ -6,3 +6,8 @@ target/
 .env
 .env.*
 !.env.example
+bin/
+node_modules/
+secrets/
+*.pem
+vendor/proprietary/
