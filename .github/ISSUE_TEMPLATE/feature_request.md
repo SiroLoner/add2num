@@ -1,26 +1,46 @@
 ---
-name: Feature Request
-about: Đề xuất tính năng hoặc cải tiến kiến trúc
-title: "[FEATURE] "
-labels: enhancement
+name: AI-Native Feature Request
+about: Đề xuất tính năng với phân rã UI, Data, API và ràng buộc AI
+title: "[FEAT] "
+labels: "enhancement, pending-dor"
 assignees: ""
 ---
 
-## 1. Vấn đề và giá trị người dùng
+## 1. Business Intent & Scope
 
-Mô tả vấn đề cần giải quyết và giá trị dự kiến.
+- **Problem statement:**
+- **In scope:**
+- **Out of scope (non-goals):**
 
-## 2. Phạm vi và yêu cầu kỹ thuật
+## 2. Architectural Decomposition
 
-- [ ] Requirement 1
-- [ ] Requirement 2
+### UI layer
 
-## 3. Ngoài phạm vi
+- Screens, fields, validation rules and error states:
 
-Nêu rõ những nội dung không thực hiện trong Issue này.
+### Data layer
 
-## 4. Acceptance Criteria
+- Entities, schema changes, constraints and PII classification:
+
+### API layer
+
+- Endpoints, HTTP methods, payloads, status codes and authorization:
+
+## 3. AI Execution Constraints
+
+- **Target technology stack:** Java 17 / Maven / Spring Boot when applicable.
+- **Allowed directory scope:**
+- **Dependency guardrail:** Do not introduce dependencies without architectural review.
+
+## 4. Acceptance Criteria (Gherkin-lite)
 
 - [ ] Given ..., when ..., then ...
-- [ ] Có test phù hợp với thay đổi.
-- [ ] Đạt ngưỡng coverage theo quy định của project.
+- [ ] Given ..., when ..., then ...
+
+## 5. Definition of Ready
+
+- [ ] UI/Data/API split is complete.
+- [ ] Scope and non-goals are explicit.
+- [ ] Acceptance criteria are testable.
+- [ ] PII and security classification is stated.
+- [ ] Target files/directories and dependency constraints are stated.

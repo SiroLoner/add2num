@@ -1,0 +1,10 @@
+# Sensitive environment and credential files
+.env*
+secrets/
+*.pem
+*.key
+*.p12
+*.jks
+
+# Proprietary vendor exports
+vendor/proprietary/

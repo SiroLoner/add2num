@@ -1,38 +1,46 @@
-## 1. Specification
+## 1. Traceability
 
-- Issue: Closes #
-- Spec/document:
+- **Issue:** Closes #<issue-number>
+- **Spec/document:** `docs/work-order-decomposition.md`
 
-## 2. Summary
+## 2. Summary of Changes
 
 -
 
-## 3. Test Plan & Proof
+## 3. AI Usage Disclosure & Provenance
 
-- [ ] Unit tests đã được thêm hoặc cập nhật.
-- [ ] Integration tests đã được thêm hoặc cập nhật khi cần.
-- [ ] `mvn verify` đã chạy thành công.
-- [ ] Log hoặc bằng chứng kiểm thử:
+- [ ] No AI tools used.
+- [ ] AI tools used: GitHub Copilot Chat / inline autocomplete.
+- [ ] Prompts and context are recorded in the specification or PR description.
+- [ ] Generated files and hand-written files are identified.
+- [ ] All AI-assisted content has been human-reviewed.
+
+## 4. Verification & Evidence
+
+- [ ] Unit tests added or updated when behavior changes.
+- [ ] Integration tests added or updated when needed.
+- [ ] Linter/static analysis passes.
+- [ ] Specification reviewed against domain rules.
+- [ ] `mvn verify` passes when applicable.
+- [ ] This is a documentation/configuration-only PR; no runtime code was added.
+
+Evidence:
 
 ```text
 Paste test output here
 ```
 
-## 4. AI Usage Disclosure
+## 5. Risk & Security Checklist
 
-- [ ] Không sử dụng AI.
-- [ ] Có sử dụng GitHub Copilot hoặc AI cho boilerplate, test hoặc autocomplete.
-- [ ] Đã đọc và xác minh toàn bộ logic do AI hỗ trợ.
-- [ ] Đã kiểm tra package, API, edge case và security impact.
-
-## 5. Security Checklist
-
-- [ ] Không có secret, API key hoặc credential hardcoded.
-- [ ] Input public đã được validation phù hợp.
-- [ ] Log không làm lộ dữ liệu nhạy cảm.
+- [ ] No hardcoded secrets, API keys or credentials in files or prompts.
+- [ ] Input parameters and authorization requirements are documented.
+- [ ] PII handling and sanitized logging are verified.
+- [ ] OWASP-relevant risks were reviewed.
+- [ ] Rollback plan is removal/revert of documentation and configuration only.
 
 ## 6. Pre-merge Checklist
 
-- [ ] Branch đã cập nhật với `main`.
-- [ ] Tài liệu đã được cập nhật.
-- [ ] Có human approval bắt buộc.
+- [ ] Branch is up to date with `main` or the agreed base branch.
+- [ ] Documentation is updated.
+- [ ] No files under `src/` or build artifacts are staged.
+- [ ] Human approval is required before merge.
