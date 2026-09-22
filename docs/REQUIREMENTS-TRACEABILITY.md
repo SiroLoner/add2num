@@ -19,7 +19,7 @@ Nguồn: `change-for-java-software-developer.html` và `Add2Num_High-level-requi
 | 1.5 | Tên class là `MyBigNumber` | `com.caesar.add2num.core.MyBigNumber` | biên dịch được là đủ |
 | 1.6 | Chữ ký `String sum(String stn1, String stn2)` | giữ nguyên **tên tham số** `stn1`, `stn2` như tài liệu | `MyBigNumberTest` gọi đúng chữ ký đó |
 | 1.7 | Giả định đầu vào hợp lệ, không bắt buộc validate | vẫn validate — xem `DESIGN.md §2` | `MyBigNumberTest.ContractEnforcement` |
-| 1.8 | Có logging (dùng `print` cũng được) | `System.Logger`: `DEBUG` mỗi phép tính, `TRACE` mỗi cột | `MyBigNumberLoggingTest` — bắt log thật và khẳng định nội dung |
+| 1.8 | Có logging (dùng `print` cũng được) | SLF4J: `DEBUG` mỗi phép tính, `TRACE` mỗi cột; không ghi operand | `MyBigNumberLoggingTest` — bắt log thật và khẳng định nội dung |
 | 1.9 | Unit test đặt ở project/thư mục riêng | `add2num-core/src/test/java` | 6 lớp test |
 | 1.10 | Test case thể hiện cách thuật toán chạy | `MyBigNumberTraceTest` in ra từng cột | như trên |
 | 1.11 | Repo GIT công khai | GitHub/GitLab (xem README §1) | — |

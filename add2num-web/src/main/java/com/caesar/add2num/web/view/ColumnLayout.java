@@ -57,7 +57,10 @@ public class ColumnLayout {
 
         char[] carries = new char[width];
         Arrays.fill(carries, ' ');
-        for (SumStep step : result.steps()) {
+        SumStep step;
+        int i = 0;
+        for (; i < result.steps().size(); i++) {
+            step = result.steps().get(i);
             if (step.carryOut() == 1) {
                 // A carry out of column k is written above column k + 1, one place further left.
                 int index = width - 2 - step.position();

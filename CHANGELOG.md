@@ -27,7 +27,7 @@ phiên bản theo [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   toán cộng tay một lượt, `O(n)` thời gian và bộ nhớ.
 - `MyBigNumber.sumWithTrace(...)`, `SumResult`, `SumStep`: ghi lại từng cột của phép cộng, có giới
   hạn số bước để đầu vào cực lớn không làm cạn bộ nhớ.
-- Logging qua `java.lang.System.Logger`: mức `DEBUG` cho mỗi phép tính, `TRACE` cho từng cột.
+- Logging qua SLF4J: mức `DEBUG` cho mỗi phép tính, `TRACE` cho từng cột; không ghi giá trị operand.
 - Kiểm tra đầu vào với thông báo nêu rõ tên tham số, ký tự sai và vị trí.
 - Bộ unit test gồm trường hợp biên, nhớ dây chuyền, test theo tính chất đại số, đối chiếu
   `BigInteger`, logging, an toàn đa luồng và hiệu năng.

@@ -22,11 +22,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Add2Num web application")
 class Add2NumWebApplicationTests {
 
-    @Autowired
-    private ApplicationContext context;
+    private final ApplicationContext context;
+    private final Add2NumProperties properties;
 
     @Autowired
-    private Add2NumProperties properties;
+    Add2NumWebApplicationTests(ApplicationContext context, Add2NumProperties properties) {
+        this.context = context;
+        this.properties = properties;
+    }
 
     @Test
     @DisplayName("starts with every collaborator in place")

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CalculationService {
 
-    private static final Logger log = LoggerFactory.getLogger(CalculationService.class);
+    private static final Logger logger = LoggerFactory.getLogger(CalculationService.class);
 
     private final MyBigNumber calculator;
     private final Add2NumProperties properties;
@@ -52,13 +52,13 @@ public class CalculationService {
 
         try {
             SumResult result = calculator.sumWithTrace(left, right, steps);
-            log.debug("added {} and {} digit operands into a {} digit result in {} ms",
+            logger.debug("added {} and {} digit operands into a {} digit result in {} ms",
                     left.length(), right.length(), result.digitCount(), result.elapsedMillis());
             return result;
         } catch (IllegalArgumentException e) {
             // The core library validates too. Reaching this point means the checks below and the
             // library's checks disagree, which is a bug worth surfacing rather than hiding.
-            log.warn("core library rejected an operand that passed the web layer checks", e);
+            logger.warn("core library rejected an operand that passed the web layer checks", e);
             throw new InvalidNumberException("first", e.getMessage(), e);
         }
     }
@@ -77,8 +77,10 @@ public class CalculationService {
             throw new InvalidNumberException(field, "Operand '" + field + "' has " + trimmed.length()
                     + " digits, which exceeds the configured limit of " + properties.maxInputDigits() + ".");
         }
-        for (int i = 0; i < trimmed.length(); i++) {
-            char c = trimmed.charAt(i);
+        int i = 0;
+        char c;
+        for (; i < trimmed.length(); i++) {
+            c = trimmed.charAt(i);
             if (c < '0' || c > '9') {
                 throw new InvalidNumberException(field, "Operand '" + field + "' must contain digits only, "
                         + "but found '" + c + "' at position " + (i + 1) + ".");

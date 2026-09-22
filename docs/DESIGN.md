@@ -128,18 +128,19 @@ Lợi ích cụ thể: `add2num-core` build ra một file `.jar` độc lập, c
 **không thể** vô tình tham chiếu ngược vào tầng web. Ranh giới được trình biên dịch bảo vệ, không
 chỉ nằm trong quy ước.
 
-### Vì sao `add2num-core` không có dependency nào
+### Vì sao `add2num-core` chỉ có dependency logging
 
-`add2num-core/pom.xml` không có dependency ở scope `compile` hay `runtime`. Logging đi qua
-`java.lang.System.Logger` — một API của chính JDK — thay vì SLF4J.
+`add2num-core/pom.xml` chỉ có `slf4j-api` ở scope `compile`; không có dependency framework hoặc
+runtime nào khác. Logging đi qua SLF4J API — giao diện logging phổ biến, cho phép ứng dụng chủ động
+chọn backend.
 
 Lý do: một thư viện nhỏ kéo theo một framework logging là một thư viện kém lịch sự. Ứng dụng nhúng
 nó vào sẽ phải chịu thêm một cây phụ thuộc và một nguồn xung đột phiên bản, để đổi lấy vài dòng log.
-`System.Logger` chuyển tiếp được sang SLF4J, Log4j hay `java.util.logging` tuỳ ứng dụng cấu hình,
-nên thư viện không ép ai vào lựa chọn nào.
+SLF4J chuyển tiếp được sang Logback, Log4j hay backend khác tuỳ ứng dụng cấu hình,
+nên thư viện không ép ai vào lựa chọn backend nào.
 
-Spring Boot bắc cầu `java.util.logging` sang Logback, nên trong `add2num-web` các dòng log này
-xuất hiện bình thường.
+Ứng dụng Spring Boot cung cấp backend SLF4J, nên trong `add2num-web` các dòng log này xuất hiện
+bình thường.
 
 `MyBigNumber` cũng không mang annotation Spring nào. Việc biến nó thành bean là trách nhiệm của
 tầng web (`CoreConfiguration`), để thư viện còn dùng được ngoài Spring.
@@ -178,7 +179,7 @@ hiểu; khả năng đọc trực tiếp accessor của record thì phụ thuộ
 
 Không có `assignableTypes`, advice này sẽ bắt luôn cả lỗi của controller Thymeleaf và trả JSON cho
 một người đang dùng trình duyệt. Cùng lý do đó, handler `HttpMessageNotReadableException` được khai
-báo riêng: nếu không, cái handler `Exception.class` ở cuối sẽ biến một request JSON sai cú pháp
+báo riêng: nếu không, handler lỗi ở cuối sẽ biến một request JSON sai cú pháp
 thành lỗi 500 — đổ lỗi cho server một việc mà client làm sai.
 
 ---

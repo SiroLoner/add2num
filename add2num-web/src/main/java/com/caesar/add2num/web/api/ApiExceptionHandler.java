@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,13 +26,17 @@ import java.util.Map;
 @RestControllerAdvice(assignableTypes = SumApiController.class)
 public class ApiExceptionHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     /** Bean validation on the request body: a field is missing or is not a plain number. */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidationFailure(MethodArgumentNotValidException e) {
         Map<String, String> fields = new LinkedHashMap<>();
-        for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
+        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+        FieldError fieldError;
+        int i = 0;
+        for (; i < fieldErrors.size(); i++) {
+            fieldError = fieldErrors.get(i);
             fields.putIfAbsent(fieldError.getField(), fieldError.getDefaultMessage());
         }
 
@@ -46,7 +51,7 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiError> handleUnreadableBody(HttpMessageNotReadableException e) {
-        log.debug("rejected an unreadable request body: {}", e.getMessage());
+        logger.debug("rejected an unreadable request body: {}", e.getMessage());
 
         ApiError body = ApiError.of(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 "The request body could not be read as JSON.");
@@ -74,9 +79,9 @@ public class ApiExceptionHandler {
      * Anything unforeseen. The detail goes to the log, where it belongs, and the caller gets a
      * stable message rather than a stack trace.
      */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleUnexpectedFailure(Exception e) {
-        log.error("unexpected failure while serving the sum API", e);
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiError> handleUnexpectedFailure(IllegalStateException e) {
+        logger.error("unexpected state while serving the sum API", e);
 
         ApiError body = ApiError.of(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),

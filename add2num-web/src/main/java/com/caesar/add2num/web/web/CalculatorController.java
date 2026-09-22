@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class CalculatorController {
 
-    private static final Logger log = LoggerFactory.getLogger(CalculatorController.class);
+    private static final Logger logger = LoggerFactory.getLogger(CalculatorController.class);
 
     private final CalculationService calculationService;
     private final ObjectMapper objectMapper;
@@ -74,7 +74,7 @@ public class CalculatorController {
         } catch (InvalidNumberException e) {
             // Reached when the service applies a limit the form annotations cannot express, such as
             // the configured maximum length. Reported against the offending box when it is known.
-            log.debug("rejected a submission: {}", e.getMessage());
+            logger.debug("rejected a submission: {}", e.getMessage());
             String field = "second".equals(e.getField()) ? "secondNumber" : "firstNumber";
             binding.rejectValue(field, "invalid.number", e.getMessage());
         }

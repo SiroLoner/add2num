@@ -1,9 +1,9 @@
 package com.caesar.add2num.core;
 
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Adds two arbitrarily large non-negative integers that are represented as decimal strings,
@@ -40,9 +40,8 @@ import java.util.List;
  * This class holds no mutable state; a single instance may be shared by any number of threads.
  *
  * <h2>Logging</h2>
- * Diagnostics go through {@link System.Logger}, which is part of the JDK, so the library imposes
- * no logging dependency on its consumers. Per-digit detail is logged at {@link Level#TRACE} and is
- * guarded by {@link Logger#isLoggable(Level)} so that nothing is formatted when tracing is off.
+ * Diagnostics go through SLF4J. Log messages contain only sizes and arithmetic metadata, never the
+ * operand values.
  *
  * @see SumResult
  * @see SumStep
@@ -52,7 +51,7 @@ public final class MyBigNumber {
     /** Default upper bound on the number of steps kept by {@link #sumWithTrace(String, String)}. */
     public static final int DEFAULT_MAX_TRACE_STEPS = 1_000;
 
-    private static final Logger LOG = System.getLogger(MyBigNumber.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(MyBigNumber.class);
 
     private static final char ZERO = '0';
     private static final char NINE = '9';
@@ -79,8 +78,8 @@ public final class MyBigNumber {
 
         String result = add(stn1, stn2, null, 0);
 
-        LOG.log(Level.DEBUG,
-                () -> "sum(" + abbreviate(stn1) + ", " + abbreviate(stn2) + ") = " + abbreviate(result));
+        logger.debug("added {} and {} digit operands into a {} digit result",
+                stn1.length(), stn2.length(), result.length());
         return result;
     }
 
@@ -129,8 +128,8 @@ public final class MyBigNumber {
         int totalColumns = countColumns(stn1, stn2, value);
         SumResult result = new SumResult(value, steps, totalColumns, steps.size() < totalColumns, elapsedNanos);
 
-        LOG.log(Level.DEBUG, () -> "sumWithTrace produced " + result.steps().size()
-                + " of " + result.totalSteps() + " step(s) in " + elapsedNanos / 1_000 + " us");
+        logger.debug("sumWithTrace produced {} of {} step(s) in {} us",
+                result.steps().size(), result.totalSteps(), elapsedNanos / 1_000);
         return result;
     }
 
@@ -158,30 +157,33 @@ public final class MyBigNumber {
         int write = capacity - 1;      // write cursor into buffer, right to left
         int carry = 0;
         int column = 0;                // 0 = units, 1 = tens, ...
+        int leftDigit;
+        int rightDigit;
+        int total;
+        int carryOut;
+        int digit;
 
         while (left >= 0 || right >= 0) {
             // A missing digit on the shorter operand behaves as 0, which is exactly what happens
             // on paper when the two numbers are right aligned.
-            int leftDigit = (left >= 0) ? stn1.charAt(left) - ZERO : 0;
-            int rightDigit = (right >= 0) ? stn2.charAt(right) - ZERO : 0;
+            leftDigit = (left >= 0) ? stn1.charAt(left) - ZERO : 0;
+            rightDigit = (right >= 0) ? stn2.charAt(right) - ZERO : 0;
 
-            int total = leftDigit + rightDigit + carry;
+            total = leftDigit + rightDigit + carry;
 
             // total is at most 9 + 9 + 1 = 19, so the carry is 0 or 1 and the digit is total or
             // total - 10. Using a comparison instead of / and % keeps the hot loop free of
             // integer division, which is the most expensive operation that would appear here.
-            int carryOut = (total > 9) ? 1 : 0;
-            int digit = total - (carryOut * 10);
+            carryOut = (total > 9) ? 1 : 0;
+            digit = total - (carryOut * 10);
 
             buffer[write--] = (char) (ZERO + digit);
 
             if (trace != null && trace.size() < maxTraceSteps) {
                 trace.add(new SumStep(column, leftDigit, rightDigit, carry, total, digit, carryOut));
             }
-            if (LOG.isLoggable(Level.TRACE)) {
-                LOG.log(Level.TRACE, "column " + column + ": " + leftDigit + " + " + rightDigit
-                        + " + " + carry + " = " + total + " -> write " + digit + ", carry " + carryOut);
-            }
+            logger.trace("column {}: {} + {} + {} = {} -> write {}, carry {}",
+                    column, leftDigit, rightDigit, carry, total, digit, carryOut);
 
             carry = carryOut;
             left--;
@@ -194,9 +196,7 @@ public final class MyBigNumber {
             if (trace != null && trace.size() < maxTraceSteps) {
                 trace.add(new SumStep(column, 0, 0, carry, carry, carry, 0));
             }
-            if (LOG.isLoggable(Level.TRACE)) {
-                LOG.log(Level.TRACE, "column " + column + ": final carry " + carry + " written out");
-            }
+            logger.trace("column {}: final carry {} written out", column, carry);
         }
 
         return canonicalise(buffer, write + 1);
@@ -231,8 +231,11 @@ public final class MyBigNumber {
         if (value == null) {
             throw new IllegalArgumentException(parameterName + " must not be null");
         }
-        for (int i = 0, n = value.length(); i < n; i++) {
-            char c = value.charAt(i);
+        int n = value.length();
+        int i = 0;
+        char c;
+        for (; i < n; i++) {
+            c = value.charAt(i);
             if (c < ZERO || c > NINE) {
                 throw new IllegalArgumentException(parameterName + " must contain decimal digits only, but found '"
                         + c + "' (U+" + String.format("%04X", (int) c) + ") at index " + i);
@@ -252,13 +255,4 @@ public final class MyBigNumber {
         return (value.length() > widest) ? widest + 1 : widest;
     }
 
-    /** Keeps log lines bounded when the operands hold millions of digits. */
-    private static String abbreviate(String value) {
-        final int head = 16;
-        if (value.length() <= head * 2) {
-            return value;
-        }
-        return value.substring(0, head) + "..." + value.substring(value.length() - head)
-                + " (" + value.length() + " digits)";
-    }
 }

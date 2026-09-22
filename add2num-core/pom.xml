@@ -16,15 +16,24 @@
   <name>Add2Num :: Core</name>
   <description>
     TASK 1 - Thu vien cong hai so nguyen rat lon dang chuoi.
-    KHONG co dependency runtime nao: chi dung JDK (java.lang.System.Logger cho logging).
+    Logging dung SLF4J API; cac dependency runtime khac van khong co.
     Nho vay thu vien nhung vao bat ky ung dung nao ma khong keo theo xung dot phien ban.
   </description>
 
   <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+
     <!--
-      Chu y: khong co <dependency> nao o scope compile/runtime.
-      Day la quyet dinh thiet ke co chu dich, xem docs/DESIGN.md muc "Zero-dependency".
+      Logger test can backend de thu log that ma khong anh huong den ung dung su dung thu vien.
     -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
