@@ -29,6 +29,7 @@
 
     <!-- Phien ban dependency / plugin duoc ghim de build tai lap duoc (reproducible). -->
     <spring-boot.version>3.3.4</spring-boot.version>
+    <springdoc.version>2.6.0</springdoc.version>
     <bootstrap.version>5.2.0</bootstrap.version>
 
     <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -68,6 +69,11 @@
         <groupId>org.webjars</groupId>
         <artifactId>bootstrap</artifactId>
         <version>${bootstrap.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        <version>${springdoc.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
