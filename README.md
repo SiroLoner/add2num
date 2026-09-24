@@ -230,6 +230,12 @@ docker run --rm -p 8080:8080 add2num
 - [`docs/REQUIREMENTS-TRACEABILITY.md`](docs/REQUIREMENTS-TRACEABILITY.md) — bảng truy vết từng
   gạch đầu dòng của đề bài tới đoạn code và test tương ứng.
 - [`docs/REVIEW-CHECKLIST.md`](docs/REVIEW-CHECKLIST.md) — phần tự review trước khi nộp.
+- [`docs/DOMAIN-MODEL.md`](docs/DOMAIN-MODEL.md) — boundary, value object và invariant của domain.
+- [`docs/ADDITION-API-SPEC.md`](docs/ADDITION-API-SPEC.md) — contract, acceptance criteria và error response của API.
+- [`docs/AI-DEVELOPMENT-GUARDRAILS.md`](docs/AI-DEVELOPMENT-GUARDRAILS.md) — quy tắc dùng Copilot và human verification.
+- [`docs/SECURITY-TEST-PLAN.md`](docs/SECURITY-TEST-PLAN.md) — phạm vi kiểm thử bảo mật và các khoảng trống còn lại.
+- [`docs/LESSONS-LEARNED.md`](docs/LESSONS-LEARNED.md) — các cải tiến đã áp dụng.
+- [`docs/RCA-CLOSEOUT-TEMPLATE.md`](docs/RCA-CLOSEOUT-TEMPLATE.md) — mẫu RCA và close-out cho mini-project.
 
 ## Giấy phép
 

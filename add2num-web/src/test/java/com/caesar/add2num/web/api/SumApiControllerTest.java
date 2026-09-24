@@ -67,6 +67,17 @@ class SumApiControllerTest {
     }
 
     @Test
+    @DisplayName("rejects a negative step budget instead of silently changing the request")
+    void rejectsNegativeStepBudget() throws Exception {
+        mockMvc.perform(post("/api/v1/sum")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"first\":\"1234\",\"second\":\"897\",\"maxSteps\":-1}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fields[0].field").value("maxSteps"))
+                .andExpect(jsonPath("$.fields[0].message").value("maxSteps must not be negative"));
+    }
+
+    @Test
     @DisplayName("adds operands far beyond the range of long")
     void addsVeryLargeOperands() throws Exception {
         String left = "9".repeat(200);

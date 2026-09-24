@@ -1,6 +1,7 @@
 package com.caesar.add2num.web.api;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 
 /**
@@ -21,5 +22,6 @@ public record SumRequest(
         @Pattern(regexp = "^\\s*[0-9]+\\s*$", message = "second must contain decimal digits only")
         String second,
 
+        @Min(value = 0, message = "maxSteps must not be negative")
         Integer maxSteps) {
 }
